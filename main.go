@@ -15,23 +15,26 @@ type Task struct{
 }
 
 func main(){
-	
 
 	add := flag.String("add", "N/A", "accepts task(string) and adds it to the list")
 	rm := flag.Int("rm", -1, "removes the tasks from the list. Takes in an index(int)")
-	done := flag.Int("done", -1,"marks the task as done. Accepts an index(int)")
+
+	flag.Parse()
 
 	_ = rm
-	_ = done
 		
 	data := getData()
 
-	fmt.Println(*add)
-
-	if(*add == "N/A"){
-		fmt.Println("added: ", *add)
+	if *add != "N/A" {
+		fmt.Println("Added:", *add)
 		newTask := Task{len(data), *add, "due"}
-		data := append(data, newTask)
+		data = append(data, newTask)
+		updateData(data)
+	}
+
+	if *rm != -1{
+		fmt.Println("Removed:", *rm)
+		data = append(data[:*rm], data[*rm+1:]...)
 		updateData(data)
 	}
 	formatPrintData(data)
@@ -40,7 +43,7 @@ func main(){
 
 func formatPrintData(tasks []Task){
 	for _, value := range tasks{
-		fmt.Printf("%v  |   %s   			[%s]\n", value.Id, value.Name, value.Status)
+		fmt.Printf("%v  |   %s \n", value.Id, value.Name)
 	}
 }
 
